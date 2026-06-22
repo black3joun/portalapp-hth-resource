@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes">
+  <title>球友直播 · 简明导览与使用提醒</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #f5f9fc;
+      color: #1f2e3d;
+      line-height: 1.6;
+      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .page-wrap {
+      max-width: 1120px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* 网格卡片背景装饰 */
+    .grid-bg {
+      position: relative;
+    }
+    .grid-bg::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: 
+        linear-gradient(rgba(26, 115, 115, 0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(26, 115, 115, 0.07) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* 主视觉 hero */
+    .hero {
+      background: linear-gradient(145deg, #d9f0f0 0%, #b5e0df 100%);
+      border-radius: 40px;
+      padding: 48px 28px 40px;
+      margin: 12px 0 32px;
+      position: relative;
+      box-shadow: 0 10px 25px -8px rgba(0, 60, 60, 0.15);
+      z-index: 1;
+    }
+    .hero h1 {
+      font-size: 2.2rem;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      color: #054a4a;
+      line-height: 1.2;
+      margin-bottom: 18px;
+    }
+    .hero p {
+      font-size: 1.1rem;
+      max-width: 620px;
+      color: #135050;
+      margin-bottom: 28px;
+    }
+    .hero-tag {
+      display: inline-block;
+      background: #ffffffcc;
+      backdrop-filter: blur(4px);
+      padding: 6px 18px;
+      border-radius: 60px;
+      font-size: 0.9rem;
+      color: #076b6b;
+      border: 1px solid #b3e0e0;
+    }
+
+    /* 卡片网格 */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+      margin: 40px 0 28px;
+      position: relative;
+      z-index: 1;
+    }
+    .card {
+      background: #ffffff;
+      border-radius: 28px;
+      padding: 28px 20px 22px;
+      box-shadow: 0 6px 16px rgba(0, 60, 70, 0.04), 0 0 0 1px #d2eaea inset;
+      transition: transform 0.2s ease, box-shadow 0.3s;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 30px -8px rgba(0, 80, 80, 0.12), 0 0 0 1px #b2dbdb inset;
+    }
+    .card-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      background: #e0f2f2;
+      border-radius: 20px;
+      font-size: 1.8rem;
+      margin-bottom: 16px;
+    }
+    .card h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #064e4e;
+      margin-bottom: 12px;
+    }
+    .card p {
+      font-size: 0.96rem;
+      color: #2b4a4a;
+      margin-bottom: 8px;
+    }
+    .card .meta-note {
+      font-size: 0.85rem;
+      color: #4a7272;
+      border-top: 1px solid #d7ecec;
+      padding-top: 10px;
+      margin-top: 10px;
+    }
+    .highlight-teal {
+      color: #017575;
+      font-weight: 500;
+    }
+
+    /* 提示块 */
+    .notice-area {
+      background: #ffffffd6;
+      backdrop-filter: blur(2px);
+      border-radius: 32px;
+      padding: 28px 24px;
+      margin: 32px 0 28px;
+      box-shadow: 0 4px 12px rgba(0, 50, 50, 0.04);
+      border: 1px solid #cfebeb;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+    }
+    .notice-area .left {
+      flex: 2 1 240px;
+    }
+    .notice-area .left h4 {
+      font-weight: 600;
+      font-size: 1.3rem;
+      color: #054a4a;
+      margin-bottom: 6px;
+      letter-spacing: -0.01em;
+    }
+    .notice-area .left p {
+      font-size: 0.96rem;
+      color: #1f4d4d;
+    }
+    .notice-area .right {
+      flex: 1 1 180px;
+      text-align: right;
+    }
+    .badge-link {
+      background: #0d6b6b;
+      color: white;
+      padding: 12px 28px;
+      border-radius: 60px;
+      font-weight: 500;
+      display: inline-block;
+      text-decoration: none;
+      font-size: 1rem;
+      letter-spacing: 0.02em;
+      transition: background 0.2s, transform 0.1s;
+      border: none;
+      box-shadow: 0 4px 6px rgba(0, 70, 70, 0.1);
+    }
+    .badge-link:hover {
+      background: #0a5959;
+      transform: scale(1.02);
+    }
+
+    /* 人群简卡 */
+    .audience-mini {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 20px 0 16px;
+    }
+    .audience-mini span {
+      background: #dff0f0;
+      padding: 6px 20px;
+      border-radius: 60px;
+      font-size: 0.9rem;
+      color: #055d5d;
+      border: 1px solid #b7dfdf;
+    }
+
+    /* 说明段 */
+    .guide-note {
+      background: #e7f4f4;
+      border-radius: 40px;
+      padding: 28px 24px;
+      margin: 24px 0 30px;
+    }
+    .guide-note p {
+      font-size: 1rem;
+      color: #1e4f4f;
+      max-width: 780px;
+    }
+    .guide-note a {
+      color: #026666;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      font-weight: 500;
+    }
+
+    /* FAQ 摘要 */
+    .faq-summary {
+      margin: 32px 0 26px;
+    }
+    .faq-summary details {
+      background: white;
+      border-radius: 50px;
+      padding: 18px 24px;
+      margin-bottom: 12px;
+      border: 1px solid #cde2e2;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .faq-summary details[open] {
+      background: #f3fbfb;
+    }
+    .faq-summary summary {
+      font-weight: 600;
+      color: #044c4c;
+      font-size: 1rem;
+      padding: 4px 0;
+    }
+    .faq-summary details p {
+      margin-top: 10px;
+      color: #1f5252;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      padding-right: 6px;
+    }
+
+    /* footer */
+    .page-footer {
+      border-top: 1px solid #d0e5e5;
+      padding: 18px 0 8px;
+      margin-top: 40px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      color: #4a7575;
+      font-size: 0.85rem;
+    }
+
+    /* 响应式 */
+    @media (max-width: 600px) {
+      .hero h1 {
+        font-size: 1.8rem;
+      }
+      .hero {
+        padding: 32px 18px 28px;
+      }
+      .card-grid {
+        grid-template-columns: 1fr;
+      }
+      .notice-area {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: left;
+      }
+      .notice-area .right {
+        text-align: left;
+      }
+      .badge-link {
+        width: 100%;
+        text-align: center;
+      }
+    }
+    @media (max-width: 420px) {
+      body {
+        padding: 12px;
+      }
+      .hero h1 {
+        font-size: 1.6rem;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="page-wrap grid-bg">
+  <!-- Hero 主视觉 -->
+  <div class="hero">
+    <h1>球友直播 · 简明指南</h1>
+    <p>一个关于运动直播与氛围分享的开放站点。无论你在哪个角落，都能找到合拍的球场节奏。</p>
+    <span class="hero-tag">⚽ 轻量 · 直观 · 移动友好</span>
+  </div>
+
+  <!-- 信息卡片：用途卡片 -->
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-icon">📺</div>
+      <h3>直播看点</h3>
+      <p>汇集各类运动现场，从足球到篮球，从日常野球到约战，随时打开即可看到真实比赛画面。</p>
+      <div class="meta-note">⏱ 无需注册，直接浏览</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🧭</div>
+      <h3>频道导航</h3>
+      <p>按运动种类、热度或地区大致筛选，帮助你快速定位感兴趣的直播房间，减少寻找时间。</p>
+      <div class="meta-note">🏷 标签分类 + 实时预览</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">💬</div>
+      <h3>氛围互动</h3>
+      <p>部分直播间配有简单聊天或弹幕，可以和其他观众一起聊战术、聊球员，氛围轻松自然。</p>
+      <div class="meta-note">🤝 友善交流，礼貌为先</div>
+    </div>
+  </div>
+
+  <!-- 适合人群 (简洁卡片形式) -->
+  <div style="margin: 6px 0 8px;">
+    <h4 style="font-weight: 500; color: #0b5f5f; margin-bottom: 6px;">适合这样的人群</h4>
+    <div class="audience-mini">
+      <span>⚽ 足球爱好者</span>
+      <span>🏀 篮球迷</span>
+      <span>📱 移动端用户</span>
+      <span>🌿 业余比赛观众</span>
+      <span>🎯 想发现新直播源的人</span>
+    </div>
+  </div>
+
+  <!-- 自然链接段落 + 引导说明 -->
+  <div class="guide-note">
+    <p>
+      如果你还没体验过，可以试试从 <a href="https://in-qiuyouzhibo.com">球友直播</a> 开始感受。它更像一个开放的门牌，指向不同运动现场。无论你是午休时随便刷刷，还是想找一场完整的野球局直播，都能找到对应频道。页面结构直接，减少多余跳转，适合快速浏览。
+    </p>
+  </div>
+
+  <!-- 访问提醒 / 提示区块 -->
+  <div class="notice-area">
+    <div class="left">
+      <h4>🔔 访问提醒</h4>
+      <p>站点基于网页直接播放，建议在稳定网络下使用。部分直播源来自第三方，加载速度可能略有差异。如果遇到空白或卡顿，可以尝试刷新或切换频道。</p>
+    </div>
+    <div class="right">
+      <!-- 可见文本严格等于「球友直播」，未含任何额外词语 -->
+      <a href="https://in-qiuyouzhibo.com" class="badge-link">球友直播</a>
+    </div>
+  </div>
+
+  <!-- FAQ 摘要 (以细节展示常见疑问) -->
+  <div class="faq-summary">
+    <details>
+      <summary>📌 使用前需要注册吗？</summary>
+      <p>目前大部分内容可直接观看，无需注册或登录。部分互动功能可能建议快速昵称，但不强制。</p>
+    </details>
+    <details>
+      <summary>📌 直播间加载慢怎么办？</summary>
+      <p>可以先检查网络，或尝试切换成流畅模式（部分播放器提供画质选择）。如果长期卡顿，也可以换个时段再试。</p>
+    </details>
+    <details>
+      <summary>📌 如何找到喜欢的运动？</summary>
+      <p>页面一般设有分类标签或搜索入口，输入关键词如「篮球」「野球」「5v5」等即可过滤。也可以关注热门推荐区。</p>
+    </details>
+  </div>
+
+  <!-- 简短底部 -->
+  <div class="page-footer">
+    <span>⏺ 内容仅供个人参考浏览</span>
+    <span>— 保持开放，享受比赛</span>
+  </div>
+</div>
+</body>
+</html>
